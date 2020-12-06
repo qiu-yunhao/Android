@@ -2,6 +2,7 @@ package com.example.testactivity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,7 +23,6 @@ public class MainActivity extends AppCompatActivity {
     private Button mFalseButton;
     private Button mNextButton;
     private Button mCheatButton;
-    private boolean mIsCheater;
     private TextView mQuestionTextView;
     private Question[] mQuestionBank = new Question[]
             {
@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
                     new Question(R.string.question_australia, true)
             };
     private int mCurrentIndex = 0;
+    private boolean mIsCheater;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
                 checkAnswer(false);
             }
         });
-        mCheatButton = (Button) findViewById(R.id.next_button);
+        mCheatButton = (Button) findViewById(R.id.cheat_button);
         mCheatButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -107,9 +108,10 @@ public class MainActivity extends AppCompatActivity {
         savedInstanceState.putInt(KEY_INDEX, mCurrentIndex);
     }
 
+    @SuppressLint("MissingSuperCall")
     @Override
-    protected void onActivityResult(int requestCode, Intent data) {
-        if (requestCode != Activity.RESULT_OK) {
+    protected void onActivityResult(int requestCode,int resultCode,Intent data) {
+        if (resultCode != Activity.RESULT_OK) {
             return;
         }
         if (requestCode == REQUEST_CODE_CHEAT) {
@@ -144,8 +146,6 @@ public class MainActivity extends AppCompatActivity {
         if (mIsCheater) {
             messageResId = R.string.judgment_toast;
         } else {
-            messageResId = R.string.incorrect_toast;
-
             if (userPressedTrue == answerIsTrue) {
                 messageResId = R.string.correct_toast;
 
