@@ -28,8 +28,11 @@ public class MainActivity extends AppCompatActivity {
                     new Question(R.string.question_asia, true),
                     new Question(R.string.question_australia, true)
             };
+
     private int mCurrentIndex = 0;
-    private int correct=0;
+    private int round = 0;
+    private int correct = 0;
+    private int x = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,25 +50,36 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                checkAnswer(true);
+                x=x+1;
+                if(x<2)
+                    checkAnswer(true);
             }
         });
         mFalseButton = (Button) findViewById(R.id.false_button);
         mFalseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                checkAnswer(false);
+                x=x+1;
+                if(x<2)
+                    checkAnswer(false);
             }
         });
         mNextButton = (Button) findViewById(R.id.next_button);
         mNextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCurrentIndex = mCurrentIndex + 1;
-                if(mCurrentIndex<mQuestionBank.length)
+                mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;
+
+                if (mCurrentIndex == 0) {
+                    round++;
+                    if (round != 0)
+                        grade();
+                }
+
+                if (mCurrentIndex < mQuestionBank.length) {
                     updateQuestion();
-                else
-                    grade();
+                    x=0;
+                }
             }
         });
         updateQuestion();
@@ -116,22 +130,24 @@ public class MainActivity extends AppCompatActivity {
     private void checkAnswer(boolean userPressedTrue) {
         boolean answerIsTrue = mQuestionBank[mCurrentIndex].isAnswerTrue();
         int messageResId = 0;
+
         if (userPressedTrue == answerIsTrue) {
             messageResId = R.string.correct_toast;
-            correct=correct+1;
+            correct = correct + 1;
 
         } else {
             messageResId = R.string.incorrect_toast;
         }
+
         Toast toast = makeText(this, messageResId, LENGTH_SHORT);
         toast.show();
     }
-    private void grade()
-    {
-        double g=correct*100/mQuestionBank.length;
-        String x="正确率是：";
-        Toast T=makeText(this,x+g+"%",LENGTH_LONG);
-        T.setGravity(Gravity.CENTER,0,0);
+
+    private void grade() {
+        double g = correct * 100 / mQuestionBank.length;
+        String x = "正确率是：";
+        Toast T = makeText(this, x + g + "%", LENGTH_LONG);
+        T.setGravity(Gravity.CENTER, 0, 0);
         T.show();
     }
 }
