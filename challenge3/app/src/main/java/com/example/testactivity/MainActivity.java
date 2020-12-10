@@ -1,4 +1,4 @@
-package com.example.testactivity;
+package com.example.testactivity;//问题：不点next数据会丢失
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private int round = 0;
     private int correct = 0;
     private int x = 0;
+    private int y =0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +42,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         if (savedInstanceState != null) {
-            mCurrentIndex = savedInstanceState.getInt(KEY_INDEX, 0);
+            mCurrentIndex = savedInstanceState.getInt(KEY_INDEX, mCurrentIndex);
+            x=savedInstanceState.getInt(KEY_INDEX,x);
+            correct=savedInstanceState.getInt(KEY_INDEX,correct);
+            y=savedInstanceState.getInt(KEY_INDEX,y);
         }
+        if(y>mCurrentIndex)
+            mCurrentIndex=y;
         mQuestionTextView = (TextView) findViewById(R.id.question_text_view);
 
         mTrueButton = (Button) findViewById(R.id.true_button);
@@ -51,8 +57,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 x=x+1;
-                if(x<2)
+                if(x<2) {
                     checkAnswer(true);
+                    y=y+1;
+                }
             }
         });
         mFalseButton = (Button) findViewById(R.id.false_button);
@@ -60,8 +68,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 x=x+1;
-                if(x<2)
+                if(x<2) {
                     checkAnswer(false);
+                    y=y+1;
+                }
             }
         });
         mNextButton = (Button) findViewById(R.id.next_button);
@@ -108,6 +118,9 @@ public class MainActivity extends AppCompatActivity {
         super.onSaveInstanceState(savedInstanceState);
         Log.i(TAG, "onSaveInstanceState");
         savedInstanceState.putInt(KEY_INDEX, mCurrentIndex);
+        savedInstanceState.putInt(KEY_INDEX,x);
+        savedInstanceState.putInt(KEY_INDEX,correct);
+        savedInstanceState.putInt(KEY_INDEX,y);
     }
 
     @Override
