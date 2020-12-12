@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">TestActivity</string>
+    <string name="question_australia">Canberra is the capital of Australia.</string>
+    <string name="question_oceans">太平洋面积大于大西洋.</string>
+    <string name="question_mideast">The Suez Canal connects the Red Sea and the Indian ocean.</string>
+    <string name="question_africa">尼罗河发源于埃及</string>
+    <string name="question_america">巴拿马运河是美洲最长的河</string>
+    <string name="question_asia">贝加尔湖是世界上最老最深的湖</string>
+    <string name="true_button">True</string>
+    <string name="false_button">False</string>
+    <string name="next_button">Next</string>
+    <string name="correct_toast">Correct!(正确)</string>
+    <string name="incorrect_toast">Incorrect!(错误)</string>
+    <string name="warning_text">你确定要这样做吗？</string>
+    <string name="show_answer_button">显示答案</string>
+    <string name="cheat_button">作弊！</string>
+    <string name="judgment_toast">来骗！来偷袭！我这个19岁的老同志.年轻人我劝你耗子喂汁，好好反思！</string>
+    <string name="number_0">剩余显示次数为：3次</string>
+    <string name="number_1">剩余显示次数为：2次</string>
+    <string name="number_2">剩余显示次数为：1次</string>
+    <string name="number_3">剩余显示次数为：0次</string>
+    <string name="wdnmd">贪得无厌</string>
+</resources>
