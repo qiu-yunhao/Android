@@ -5,10 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.widget.Button;
@@ -22,10 +24,18 @@ public class CheatActivity extends AppCompatActivity {
     private static final String EXTRA_ANSWER_IS_TRUE = "com.example.testactivity.MainActivity.answer_is_true";
     private static final String EXTRA_ANSWER_SHOWN = "com.example.testactivity.MainActivity.answer_shown";
     private static final String KEY_index = "key";
+    private static final String T = "CheatActivity";
     private boolean mAnswerIsTrue;
     private TextView mAnswerTextView;
     private TextView mNumber;
     private Button mShowAnswerButton;
+    private number[] number = new number[]
+            {
+                    new number(R.string.number_0),
+                    new number(R.string.number_1),
+                    new number(R.string.number_2),
+                    new number(R.string.number_3),
+            };
 
     private int n;
 
@@ -34,7 +44,7 @@ public class CheatActivity extends AppCompatActivity {
         intent.putExtra(EXTRA_ANSWER_IS_TRUE, answerIsTrue);
         return intent;
     }
-
+    /*解析result这一Intent类的数值*/
     public static boolean wasAnswerShown(Intent result) {
         return result.getBooleanExtra(EXTRA_ANSWER_SHOWN, false);
     }
@@ -47,6 +57,14 @@ public class CheatActivity extends AppCompatActivity {
         mAnswerIsTrue = getIntent().getBooleanExtra(EXTRA_ANSWER_IS_TRUE, false);
         mAnswerTextView = (TextView) findViewById(R.id.answer_text_view);
 
+        n = Get();
+
+
+
+
+        mNumber = (TextView) findViewById(R.id.show_number);
+        upgo();
+
         if (savedInstanceState != null)
             n = savedInstanceState.getInt("WHAT", 0);
 
@@ -56,6 +74,11 @@ public class CheatActivity extends AppCompatActivity {
         mShowAnswerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                n=n+1;
+                if(n<4)
+                    upgo();
+                else
+                    tu();
                 if (mAnswerIsTrue) {
                     mAnswerTextView.setText(R.string.true_button);
                 } else {
@@ -87,6 +110,9 @@ public class CheatActivity extends AppCompatActivity {
 
     }
 
+
+
+/*输入要传递的信息，并将其储存在Intent中*/
     private void setAnswerShowResult(Boolean isAnswerShown) {
         Intent data = new Intent();
         data.putExtra(EXTRA_ANSWER_SHOWN, isAnswerShown);
@@ -99,6 +125,56 @@ public class CheatActivity extends AppCompatActivity {
         super.onSaveInstanceState(out);
         out.putInt("WHAT", n);
     }
+
+    private void upgo() {
+        int go = number[n].getNumber();
+        mNumber.setText(go);
+    }
+
+    private void tu() {
+        Toast f = makeText(this, R.string.wdnmd, Toast.LENGTH_SHORT);
+        f.show();
+    }
+
+
+
+    protected void onStart() {
+        super.onStart();
+        /*实现点击cheat按钮后更变次数*/
+        Log.d(T, "CHEAT onStart() called");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(T, "CHEAT onResume() called");
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d(T, "CHEAT onPause() called");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d(T, "CHEAT onStop() called");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d(T, "CHEAT onDestroyed() called");
+    }
+    private int Get()
+    {
+        Intent e = getIntent();
+        n = e.getIntExtra("A",0);
+        return n;
+    }
+
 }
 
 

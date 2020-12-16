@@ -7,7 +7,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -86,14 +85,19 @@ public class MainActivity extends AppCompatActivity {
         mCheatButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 if (num < 3) {
                     boolean answerIsTrue = mQuestionBank[mCurrentIndex].isAnswerTrue();
+
                     Intent intent = CheatActivity.newIntent(MainActivity.this, answerIsTrue);
                     startActivityForResult(intent, REQUEST_CODE_CHEAT);
                 } else
                     tu();
+
             }
         });
+
+
 
 
         /*Next按钮部分*/
@@ -101,13 +105,11 @@ public class MainActivity extends AppCompatActivity {
         mNextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mIsCheater)
-                    num = num + 1;
+
                 mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;
                 mIsCheater = false;
                 updateQuestion();
-                if (num < 4)
-                    upgo();
+
             }
         });
         updateQuestion();
@@ -116,19 +118,31 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        /*实现点击cheat按钮后更变次数*/
         Log.d(TAG, "onStart() called");
+        if (mIsCheater)
+            num = num + 1;
+        if (num < 4)
+            upgo();
+        Intent t = new Intent(MainActivity.this,CheatActivity.class);
+        t.putExtra("A",num);
+        startActivity(t);
+
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         Log.d(TAG, "onResume() called");
+
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         Log.d(TAG, "onPause() called");
+
     }
 
     @Override
@@ -141,6 +155,7 @@ public class MainActivity extends AppCompatActivity {
     @SuppressLint("MissingSuperCall")
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d(TAG,"输入mIscheat的布尔值 called");
         if (resultCode != Activity.RESULT_OK) {
             return;
         }
@@ -164,6 +179,7 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
         Log.d(TAG, "onDestroyed() called");
     }
+
 
     private void updateQuestion() {
         int question = mQuestionBank[mCurrentIndex].getTextResId();
@@ -192,6 +208,7 @@ public class MainActivity extends AppCompatActivity {
         int go = number[num].getNumber();
         mNumber.setText(go);
     }
+
 
     private void tu() {
         Toast f = makeText(this, R.string.wdnmd, Toast.LENGTH_SHORT);
