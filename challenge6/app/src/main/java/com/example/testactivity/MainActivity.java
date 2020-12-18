@@ -44,7 +44,8 @@ public class MainActivity extends AppCompatActivity {
 
     private int mCurrentIndex = 0;//控制数组下标来达到控制问题输出的目的
     private boolean mIsCheater;//作为判断是否查看答案的变量
-    private int num = 0;
+    public  static int num = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,8 +90,10 @@ public class MainActivity extends AppCompatActivity {
                 if (num < 3) {
                     boolean answerIsTrue = mQuestionBank[mCurrentIndex].isAnswerTrue();
 
-                    Intent intent = CheatActivity.newIntent(MainActivity.this, answerIsTrue);
+                    Intent intent = CheatActivity.newIntent(MainActivity.this, answerIsTrue,num);
                     startActivityForResult(intent, REQUEST_CODE_CHEAT);
+
+
                 } else
                     tu();
 
@@ -121,12 +124,15 @@ public class MainActivity extends AppCompatActivity {
         /*实现点击cheat按钮后更变次数*/
         Log.d(TAG, "onStart() called");
         if (mIsCheater)
+        {
             num = num + 1;
-        if (num < 4)
-            upgo();
-        Intent t = new Intent(MainActivity.this,CheatActivity.class);
-        t.putExtra("A",num);
-        startActivity(t);
+            if (num < 4 && num > 0) {
+                upgo();
+                //Intent t = new Intent(MainActivity.this, CheatActivity.class);
+                //t.putExtra("A", num);
+                //startActivity(t);
+            }
+        }
 
 
     }
