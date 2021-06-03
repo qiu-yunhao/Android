@@ -1,7 +1,0 @@
-<resources>
-    <string name="app_name">CriminalInternet1</string>
-    <string name="crime_title_hint">输入一个恶习</string>
-    <string name="crime_title_label">一个中二的标题</string>
-    <string name="crime_details_label">又是一个小小的细节</string>
-    <string name="crime_solved_label">解决它</string>
-</resources>

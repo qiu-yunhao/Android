@@ -25,8 +25,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private TextView textView2;
 
     private int number;
-    private String str1;
-    private String str2;
+    public static String str1;
+    public static String str2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

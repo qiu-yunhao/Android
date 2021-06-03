@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mvprxjava.bean.USER;
+import com.example.mvprxjava.model.Content;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,6 +22,15 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.ResponseBody;
+import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 public class User_Adapter extends RecyclerView.Adapter<ViewHolder_choose> {
     private Context context;
@@ -42,12 +52,22 @@ public class User_Adapter extends RecyclerView.Adapter<ViewHolder_choose> {
         USER.ItemsDTO userDate = userDataList.get(position);
         holder.bind(userDate);
         updatePic(holder,userDate);
+        /*try {
+            upMap(holder,userDate);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }*/
         holder.hide();
     }
 
 
     public int getItemCount() {
-        return userDataList.size();
+        if (userDataList.size()== 0){
+            return 1;
+        }
+        else {
+            return userDataList.size();
+        }
     }
 
     public void updatePic(ViewHolder_choose holder, USER.ItemsDTO uDto) {
@@ -85,5 +105,54 @@ public class User_Adapter extends RecyclerView.Adapter<ViewHolder_choose> {
 
             }
         }).start();
+    }
+
+    public void upMap(ViewHolder_choose holder,USER.ItemsDTO uDto) throws MalformedURLException {
+        List<String> uList = uDto.getAvatars();
+        URL url = new URL(uList.get(0));
+        Retrofit retrofit = new Retrofit.
+                Builder()
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .build();
+        Content api = retrofit.create(Content.class);
+        api.getImage(url)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map((Func1<ResponseBody, Bitmap>) responsebody -> {
+                    InputStream inputStream = null;
+                    try {
+                        inputStream = responsebody.byteStream();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    } finally {
+                        try {
+                            if (inputStream != null) {
+                                inputStream.close();
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    if (inputStream != null) {
+                        return BitmapFactory.decodeStream(inputStream);
+                    }
+                    return null;
+                }).subscribe(new Subscriber<Bitmap>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(Bitmap bitmap) {
+                holder.imageView.setImageBitmap(bitmap);
+            }
+        });
     }
 }
