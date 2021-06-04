@@ -25,6 +25,6 @@ public interface Content {
     );
     @GET
     Observable getImage(
-            @Url URL url
+            @Url String url
     );
 }

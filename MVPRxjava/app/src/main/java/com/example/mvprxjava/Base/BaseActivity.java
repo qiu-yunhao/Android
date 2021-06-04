@@ -3,11 +3,13 @@ package com.example.mvprxjava.Base;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
 import com.example.mvprxjava.R;
+import com.example.mvprxjava.presenter.IPresent;
 
-public abstract class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity  {
+
+    protected IPresent iPresent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -15,5 +17,11 @@ public abstract class BaseActivity extends AppCompatActivity {
         setContentView(R.layout.activity_handle);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+    }
     public abstract void init();
+
 }

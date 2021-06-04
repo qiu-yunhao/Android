@@ -16,10 +16,15 @@ import android.widget.Toast;
 
 import com.example.mvprxjava.Base.BaseFragment;
 import com.example.mvprxjava.R;
+import com.example.mvprxjava.model.HandleRepo;
+import com.example.mvprxjava.presenter.Presenter;
 import com.example.mvprxjava.presenter.User_Adapter;
 import com.example.mvprxjava.bean.Developer;
 import com.example.mvprxjava.bean.USER;
 import com.example.mvprxjava.model.Content;
+import com.example.mvprxjava.view.HandleView;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -37,13 +42,13 @@ import static com.example.mvprxjava.view.Activity.MainActivity.str1;
 import static com.example.mvprxjava.view.Activity.MainActivity.str2;
 
 
-public class Main_Fragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
+public class Main_Fragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener, HandleView {
     private final static String KEY = "GET_key";
     private final static String S1 = "GET_MAIN_FRAGMENT_S1";
     private final static String S2 = "GET_MAIN_FRAGMENT_S2";
     private int num;
     private USER use;
-    private List<USER.ItemsDTO> list;
+    private List<USER.ItemsDTO> list = new ArrayList<>();
     private RecyclerView recyclerView;
     private LinearLayoutManager linearLayoutManager;
     private User_Adapter adapter;
@@ -51,6 +56,7 @@ public class Main_Fragment extends BaseFragment implements SwipeRefreshLayout.On
     private View v;
     private String lang;
     private String since;
+    private Presenter presenter;
 
     public Main_Fragment() {
         // Required empty public constructor
@@ -78,20 +84,16 @@ public class Main_Fragment extends BaseFragment implements SwipeRefreshLayout.On
         since = getArguments().getString(S2);
         // Inflate the layout for this fragment
         v = inflater.inflate(R.layout.fragment_main_, container, false);
-        GetRepo(str1, str2);
+        init(v);
+        presenter.GetTheRepo(str1,str2);
         return v;
     }
 
     public void init(View v) {
+        presenter = new Presenter(this);
         swipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipeFreshLayout);
         recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
         initSWipe();
-        Log.d("MainActivity", "1");
-        adapter = new User_Adapter(getActivity(),list);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
-        Log.d("MainActivity", "2");
-        recyclerView.setAdapter(adapter);
-        Log.d("MainActivity", "3");
     }
 
     public void initSWipe() {
@@ -99,34 +101,7 @@ public class Main_Fragment extends BaseFragment implements SwipeRefreshLayout.On
         swipeRefreshLayout.setOnRefreshListener(this);
     }
 
-    public void GetRepo(String s1, String s2) {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://trendings.herokuapp.com")
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .build();
-        Content content = retrofit.create(Content.class);
-        content.getRepo(s1,s2)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<USER>() {
-                    @Override
-                    public void onNext(USER value) {
-                        Log.d("TRY","try");
-                        list = value.getItems();
-                        init(v);
-                    }
 
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-                });
         /*Call<USER> u = content.getRepo(s1, s2);
         u.enqueue(new Callback<USER>() {
 
@@ -142,11 +117,10 @@ public class Main_Fragment extends BaseFragment implements SwipeRefreshLayout.On
 
             @Override
             public void onFailure(Call<USER> call, Throwable t) {
-                TurnToFailure();
+
                 Toast.makeText(getContext(), "失败", Toast.LENGTH_SHORT).show();
             }
         });*/
-    }
 
     public void GetDevelopers(String s1, String s2) {
         Retrofit retrofit = new Retrofit.Builder()
@@ -182,8 +156,9 @@ public class Main_Fragment extends BaseFragment implements SwipeRefreshLayout.On
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
                 if (msg.what == 0x996) {
-                    GetRepo(str1, str2);
+                    presenter.GetTheRepo(str1,str2);
                     adapter.notifyDataSetChanged();
+                    init(v);
                     swipeRefreshLayout.setRefreshing(false);
                 }
             }
@@ -203,4 +178,16 @@ public class Main_Fragment extends BaseFragment implements SwipeRefreshLayout.On
     }
 
 
+    @Override
+    public void ShowRepoInfo(List<USER.ItemsDTO> dtoList) {
+        this.list = dtoList;
+        adapter = new User_Adapter(getActivity(),list);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
+        recyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    public void ShowError() {
+        TurnToFailure();
+    }
 }
