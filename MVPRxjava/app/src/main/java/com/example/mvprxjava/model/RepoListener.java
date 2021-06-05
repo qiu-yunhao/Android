@@ -8,4 +8,5 @@ public interface RepoListener {
     void RespondSuccess(List<USER.ItemsDTO> list);
     void RespondOver();
     void RespondFailure();
+    void GetRope(RepoListener repoListener, String lang ,String since);
 }

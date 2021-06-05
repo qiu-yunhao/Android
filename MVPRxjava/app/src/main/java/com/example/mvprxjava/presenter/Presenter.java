@@ -37,6 +37,11 @@ public class Presenter {
                 handleView.ShowError();
 
             }
+
+            @Override
+            public void GetRope(RepoListener repoListener, String lang, String since) {
+
+            }
         }, lang, since);
     }
 }

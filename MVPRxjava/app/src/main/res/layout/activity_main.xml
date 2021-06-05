@@ -23,7 +23,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="仓库"
+            android:text="Trending"
             android:textColor="@color/purple_200"
             android:textSize="28sp" />
 
@@ -38,24 +38,38 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:orientation="horizontal">
+        <TextView
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:text="语言:"
+            android:textSize="20dp"
+            android:gravity="center"/>
 
         <TextView
             android:id="@+id/lang"
             android:text="java"
             android:layout_width="0dp"
             android:textSize="28sp"
-            android:gravity="center"
+            android:gravity="center_vertical"
             android:textColor="@color/purple_500"
             android:layout_height="match_parent"
-            android:layout_weight="1" />
+            android:layout_weight="3" />
         <View
             android:layout_width="2dp"
             android:layout_height="match_parent"
             android:background="@color/purple_200"/>
+        <TextView
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:text="时间:"
+            android:textSize="20dp"
+            android:gravity="center"/>
 
         <TextView
             android:id="@+id/since"
-            android:layout_weight="1"
+            android:layout_weight="3"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:text="today"

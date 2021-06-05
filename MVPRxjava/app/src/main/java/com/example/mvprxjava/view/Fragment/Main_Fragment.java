@@ -2,6 +2,7 @@ package com.example.mvprxjava.view.Fragment;
 
 import android.os.Bundle;
 
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -16,28 +17,19 @@ import android.widget.Toast;
 
 import com.example.mvprxjava.Base.BaseFragment;
 import com.example.mvprxjava.R;
-import com.example.mvprxjava.model.HandleRepo;
 import com.example.mvprxjava.presenter.Presenter;
 import com.example.mvprxjava.presenter.User_Adapter;
 import com.example.mvprxjava.bean.Developer;
 import com.example.mvprxjava.bean.USER;
 import com.example.mvprxjava.model.Content;
 import com.example.mvprxjava.view.HandleView;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
-
-import rx.Observer;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-
 import static com.example.mvprxjava.view.Activity.MainActivity.str1;
 import static com.example.mvprxjava.view.Activity.MainActivity.str2;
 
@@ -93,6 +85,7 @@ public class Main_Fragment extends BaseFragment implements SwipeRefreshLayout.On
         presenter = new Presenter(this);
         swipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipeFreshLayout);
         recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
+        recyclerView.setHasFixedSize(true);
         initSWipe();
     }
 
@@ -183,11 +176,13 @@ public class Main_Fragment extends BaseFragment implements SwipeRefreshLayout.On
         this.list = dtoList;
         adapter = new User_Adapter(getActivity(),list);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
+        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL));
         recyclerView.setAdapter(adapter);
     }
 
     @Override
     public void ShowError() {
+
         TurnToFailure();
     }
 }

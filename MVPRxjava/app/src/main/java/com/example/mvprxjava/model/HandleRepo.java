@@ -13,7 +13,7 @@ import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class HandleRepo implements RepoModel {
+public class HandleRepo implements RepoListener {
     private List<USER.ItemsDTO> uList;
     private HandleRepo handleRepo;
     private RepoListener repoListener;
@@ -29,6 +29,21 @@ public class HandleRepo implements RepoModel {
 
     public List<USER.ItemsDTO> getuList() {
         return uList;
+    }
+
+    @Override
+    public void RespondSuccess(List<USER.ItemsDTO> list) {
+
+    }
+
+    @Override
+    public void RespondOver() {
+
+    }
+
+    @Override
+    public void RespondFailure() {
+
     }
 
     @Override
