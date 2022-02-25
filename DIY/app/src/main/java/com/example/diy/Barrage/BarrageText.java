@@ -23,7 +23,7 @@ public class BarrageText extends androidx.appcompat.widget.AppCompatTextView {
     private Random random;
     private int v;
     public static int num = 0;
-    private static final String[] s = {"白羽祺yyds","I Love 白羽祺","兴许会相逢","爱是反反复复","也是有始无终"};
+    private static final String[] s ="I Love Muxi","Android!!!","study hard hard","day day up!"};
 
     public BarrageText(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
